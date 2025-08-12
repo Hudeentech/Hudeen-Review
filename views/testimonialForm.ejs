@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Testimonial</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="testimonial-form-wrapper">
+            <div class="testimonial-form-content">
+                <div class="testimonial-form-header">
+                    <h1>Loved Your Experience? <br>Share the Love!</h1>
+                </div>
+
+                <form id="testimonialForm" enctype="multipart/form-data">
+                    <input type="hidden" name="token" value="<%= token %>">
+
+                    <!-- Custom Image Upload Area -->
+                    <label for="picture" class="image-upload-area">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Click to choose image
+                    </label>
+                    <input type="file" id="picture" name="picture" accept="image/*">
+                    <small style="color: var(--text-secondary); text-align: center; margin-top: -0.5rem;">(Optional:
+                        Upload a profile picture)</small>
+
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Please enter your full name">
+
+                    <label for="company">Company Name</label>
+                    <input type="text" id="company" name="company" placeholder="Enter your company name">
+
+                    <label for="role">Your work title / position</label>
+                    <input type="text" id="role" name="role" placeholder="e.g. senior web developer">
+
+                    <label for="message">Testimonials</label>
+                    <textarea id="message" name="message" required
+                        placeholder="Your Message / Testimonials here!"></textarea>
+
+                    <button type="submit" class="testimonial-form-submit-btn">
+                        Submit
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </form>
+                <div id="responseMessage" class="message" style="display:none;"></div>
+
+                <i style="color: white;">Please note that this link will expire in 24hrs, and your testimonial will be displayed on the front
+                    page of my portfolio website. Visiting this link means you agree to the terms and conditions of my
+                    website, and also you are giving me the right to use your testimonial for marketing purposes.
+
+                    Thank you for your time and support!
+                </i>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('testimonialForm');
+        const responseMessageDiv = document.getElementById('responseMessage');
+        const pictureInput = document.getElementById('picture');
+        const imageUploadArea = document.querySelector('.image-upload-area');
+
+        // Optional: Display selected file name
+        pictureInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px; height: 25px; margin-bottom: 8px; color: var(--text-primary);">
+                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+                            </svg>
+                            ${e.target.files[0].name}`;
+            } else {
+                imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+                        </svg>Click to choose image`;
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/submit-testimonial', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.text();
+
+                if (response.ok) {
+                    responseMessageDiv.textContent = result;
+                    responseMessageDiv.className = 'message success';
+                    responseMessageDiv.style.display = 'block';
+                    form.reset();
+                    // Reset custom image upload area to default
+                    imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+                        </svg>Click to choose image`;
+                } else {
+                    responseMessageDiv.textContent = result || 'An unknown error occurred. Please try again.';
+                    responseMessageDiv.className = 'message error';
+                    responseMessageDiv.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error submitting testimonial:', error);
+                responseMessageDiv.textContent = 'Network error or server unavailable. Please check your connection.';
+                responseMessageDiv.className = 'message error';
+                responseMessageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

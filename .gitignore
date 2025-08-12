@@ -1,0 +1,47 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.nyc_output/
+.temp/
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Firebase Admin SDK service account key (sensitive)
+# It's recommended to load this from an environment variable on deployment,
+# so the actual file should NOT be committed.
+# Example: serviceAccountKey.json
+*.json
+
+# VS Code specific files
+.vscode/
+
+# Build artifacts for React App
+build/
+dist/
+
+# Logs
+logs/
+*.log
+
+# npm package manager cache
+.npm/
+
+# macOS system files
+.DS_Store
+
+# Thumbnails from macOS
+.Spotlight-V100
+.Trashes
+__MACOSX
+
+# Dependency directories
+package-lock.json
+# yarn.lock # Uncomment if you're not using yarn or want to commit it for strict dependency management
