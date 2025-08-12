@@ -25,8 +25,7 @@ const firebaseAppOptions = {
     credential: admin.credential.cert(serviceAccount),
 };
 
-// Conditionally add storageBucket if it's defined and not an empty string
-// This prevents the "Bucket name not specified" error if STORAGE_BUCKET is truly not set or empty
+
 if (process.env.STORAGE_BUCKET && process.env.STORAGE_BUCKET.trim() !== '') {
     firebaseAppOptions.storageBucket = process.env.STORAGE_BUCKET;
 }
@@ -35,8 +34,6 @@ admin.initializeApp(firebaseAppOptions);
 
 const db = admin.firestore(); // Firestore instance
 
-// Conditionally initialize bucket if STORAGE_BUCKET is provided
-// This also prevents errors if Storage is not intended for use
 let bucket = null;
 if (process.env.STORAGE_BUCKET && process.env.STORAGE_BUCKET.trim() !== '') {
     try {
