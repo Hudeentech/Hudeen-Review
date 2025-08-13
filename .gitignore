@@ -18,10 +18,10 @@ yarn-error.log*
 # It's recommended to load this from an environment variable on deployment,
 # so the actual file should NOT be committed.
 # Example: serviceAccountKey.json
-*.json
 
 # VS Code specific files
 .vscode/
+serviceAccountKey.json
 
 # Build artifacts for React App
 build/
