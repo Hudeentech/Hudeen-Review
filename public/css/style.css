@@ -328,7 +328,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
 /* --- Testimonial Grid (External API Consumption Example) --- */
 .testimonial-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
     gap: 20px;
     padding: 15px 0;
 }
@@ -405,7 +405,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
 
 .stat-card {
     background-color: var(--card-background);
-    padding: 20px;
+    padding: 16px;
     border-radius: 10px;
     box-shadow: 0 4px 15px var(--shadow-subtle);
     transition: all 0.2s ease;
@@ -430,7 +430,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
 }
 
 .stat-card .count {
-    font-size: 2.5rem;
+    font-size: 2.4rem;
     font-weight: 700;
     color: rgb(255, 255, 255); /* Solid gold for numbers */
     background: none;
@@ -690,7 +690,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
 
 .status.pending { background-color: rgb(11, 169, 255); color: var(--text-dark); } /* Gold background, dark text */
 .status.approved { background-color: rgb(87, 255, 120); color: var(--text-dark); } /* Gold background, dark text */
-.status.deleted { background-color: #3D3D3D; color: rgb(255, 110, 74); } /* Dark background, gold text */
+.status.deleted { background-color: #ff3030; color: rgb(46, 46, 46); } /* Dark background, gold text */
 .status.N_A { background-color: #3D3D3D; color: var(--text-secondary); } /* Dark background, muted gold text */
 
 .admin-testimonial-actions {
@@ -850,8 +850,8 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
         font-size: clamp(1.6rem, 5vw, 2.8rem);
     }
     .admin-dashboard-stats {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 15px;
+        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        gap: 8px;
     }
     .stat-card .count {
         font-size: 2.2rem;
@@ -871,6 +871,10 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     }
     h1, h2, h3, h4 {
         font-size: clamp(1.4rem, 7vw, 2.2rem);
+        margin-bottom: 1.5rem;
+    }
+    h4 {
+        font-size: clamp(1.2rem, 4vw, 2rem);
         margin-bottom: 1.5rem;
     }
     .testimonial-form-header h1 {
