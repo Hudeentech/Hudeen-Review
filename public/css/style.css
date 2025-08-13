@@ -503,7 +503,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     margin-top: 25px;
     margin-bottom: 30px;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     gap: 10px;
 }
@@ -515,6 +515,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     color: gold; /* Gold text */
     text-decoration: none;
     border-radius: 8px;
+    width: 100%;
     font-weight: 500;
     transition: all 0.2s ease;
     box-shadow: 0 2px 8px var(--shadow-subtle);
@@ -847,10 +848,10 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
         text-align: left;
     }
     h1, h2, h3, h4 {
-        font-size: clamp(1.6rem, 5vw, 2.8rem);
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
     }
     .admin-dashboard-stats {
-        grid-template-columns: repeat(2, minmax(180px, 1fr));
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
         gap: 8px;
     }
     .stat-card .count {
@@ -873,10 +874,11 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
         font-size: clamp(1.4rem, 7vw, 2.2rem);
         margin-bottom: 1.5rem;
     }
-    h4 {
-        font-size: clamp(1.2rem, 4vw, 2rem);
+   .stat-card h4 {
+        font-size: clamp(1rem, 3vw, 1.5rem);
         margin-bottom: 1.5rem;
     }
+
     .testimonial-form-header h1 {
         font-size: clamp(1.8rem, 7vw, 3rem);
     }
@@ -976,5 +978,8 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     }
     form {
         padding: .5em;
+    }
+        .count{
+        font-size: 1.2em;
     }
 }

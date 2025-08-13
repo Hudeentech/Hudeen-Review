@@ -14,7 +14,7 @@
 
         <div style="display: flex; flex-direction: row; justify-content: start; align-items: start;"  class="admin-links">
             <a style="background: gold;color: #333;"  href="/admin/dashboard" class="btn-primary">Dashboard</a>
-            <a style="background: gold;color: #333;"  href="/admin/testimonials" class="btn-primary">View All Testimonials</a>
+            <a style="background: gold;color: #333;"  href="/admin/testimonials" class="btn-primary">Testimonials</a>
         </div>
 
         <% if (testimonials.length === 0) { %>
@@ -39,7 +39,7 @@
                                 <button style="background: rgb(0, 255, 145);" class="approve-btn" onclick="updateTestimonialStatus('<%= testimonial.id %>', 'approved', this)">Approve</button>
                             <% } %>
                             <% if (testimonial.status !== 'deleted') { %>
-                                <button style="background: rgb(255, 75, 75);" class="delete-btn" onclick="updateTestimonialStatus('<%= testimonial.id %>', 'deleted', this)">Delete</button>
+                                <button style="background: rgb(255, 75, 75); color: white;" class="delete-btn" onclick="updateTestimonialStatus('<%= testimonial.id %>', 'deleted', this)">Delete</button>
                             <% } %>
                         </div>
                     </div>
