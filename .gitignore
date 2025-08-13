@@ -45,3 +45,4 @@ __MACOSX
 # Dependency directories
 package-lock.json
 # yarn.lock # Uncomment if you're not using yarn or want to commit it for strict dependency management
+.vercel

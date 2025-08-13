@@ -5,25 +5,25 @@
     /* Colors strictly limited to gold, white, and #1c1c1c (or very dark variations) */
     --body-background: #1c1c1c; /* Main dark background */
     --container-background: #2b2b2b; /* Slightly lighter dark for main content areas */
-    --form-background: #2b2b2b; /* Same as container for consistency */
-    --card-background: #2b2b2b; /* Same as container for consistency */
+    --form-background: #232323; /* Same as container for consistency */
+    --card-background: #232323; /* Same as container for consistency */
 
     --text-primary: gold; /* Main text is gold */
     --text-secondary: white; /* Secondary text is white */
     --text-dark: #1A1A1A; /* Dark text for gold button (very close to #1c1c1c) */
 
-    --input-background: #3D3D3D; /* Darker background for input fields (variation of #1c1c1c) */
-    --input-border: #555555; /* Subtle border for inputs (variation of #1c1c1c) */
+    --input-background: #2c2c2c; /* Darker background for input fields (variation of #1c1c1c) */
+    --input-border: #3b3b3b; /* Subtle border for inputs (variation of #1c1c1c) */
     --input-focus-border: gold; /* Gold border on focus */
 
     --button-gold: gold; /* Main action button color */
-    --button-dark: #3D3D3D; /* Dark button color */
+    --button-dark: #2b2b2b; /* Dark button color */
 
     /* Accent colors (for status, etc., now using gold/dark/white variations) */
     --accent-gold-light: rgba(255, 215, 0, 0.8); /* Lighter gold for highlights */
     --accent-gold-medium: rgba(255, 215, 0, 0.6); /* Medium gold for accents */
-    --accent-dark-highlight: #4A4A4A; /* Slightly lighter dark for hover/highlights */
-    --accent-white-opacity: rgba(255, 255, 255, 0.2); /* For subtle backgrounds, like success/error */
+    --accent-dark-highlight: #323232; /* Slightly lighter dark for hover/highlights */
+    --accent-white-opacity: rgba(50, 50, 50, 0.2); /* For subtle backgrounds, like success/error */
     --accent-gold-opacity: rgba(255, 215, 0, 0.1); /* For subtle gold backgrounds */
 
     /* Shadows (dark, subtle) */
@@ -47,7 +47,7 @@ body {
     align-items: center;
     overflow-x: hidden;
     padding-top: 20px;
-    background: var(--container-background);
+    background: #1c1c1c;
 }
 
 .container {
@@ -97,7 +97,6 @@ form {
     padding: 25px;
     border: none;
     border-radius: 8px;
-    background-color: var(--form-background);
     box-shadow: none;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
@@ -298,7 +297,6 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
 .testimonial-form-content {
     flex: 1;
     min-width: 320px;
-    background-color: var(--container-background);
     border-radius: 12px;
 
 }
@@ -425,6 +423,7 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     color: white; /* Gold */
     font-size: 1.1rem;
     background: none;
+    text-align: center;
     -webkit-text-fill-color: var(--text-primary);
     text-fill-color: var(--text-primary);
     text-shadow: none;
@@ -760,6 +759,65 @@ button:not(.testimonial-form-submit-btn):active, .btn-primary:active {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(-3px);
+}
+
+/* --- Fancy Modal Toast Notification --- */
+.toast-modal {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #232323;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  border: 1.5px solid gold;
+  padding: 14px 22px 14px 18px;
+  font-size: 1.08rem;
+  font-weight: 500;
+  min-width: 220px;
+  max-width: 90vw;
+  opacity: 0.98;
+  animation: toastIn 0.4s cubic-bezier(.4,2,.6,1) both;
+}
+.toast-modal.show {
+  display: flex;
+}
+#toast-emoji {
+  font-size: 1.5rem;
+  margin-right: 4px;
+}
+#toast-close {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  margin-left: 10px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+#toast-close:hover {
+  opacity: 1;
+}
+@media (max-width: 600px) {
+  .toast-modal {
+    top: 12px;
+    left: 8px;
+    padding: 10px 10px 10px 10px;
+    font-size: 0.98rem;
+    min-width: 140px;
+  }
+  #toast-emoji {
+    font-size: 1.2rem;
+  }
+}
+@keyframes toastIn {
+  0% { transform: translateY(-30px) scale(0.95); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 0.98; }
 }
 
 /* --- Responsive Adjustments --- */

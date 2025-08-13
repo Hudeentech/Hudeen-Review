@@ -8,13 +8,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Manage Testimonials</h1>
-        <p style="text-align: center; color: var(--text-secondary);">Review, approve, or delete submitted testimonials.</p>
+        <h1 style="text-align: left;">Manage Testimonials</h1>
+        <p style="text-align: left; color: var(--text-secondary);">Review, approve, or delete submitted testimonials.</p>
         <hr>
 
-        <div class="admin-links">
-            <a href="/admin/dashboard" class="btn-primary">Dashboard</a>
-            <a href="/admin/testimonials" class="btn-primary">View All Testimonials</a>
+        <div style="display: flex; flex-direction: row; justify-content: start; align-items: start;"  class="admin-links">
+            <a style="background: gold;color: #333;"  href="/admin/dashboard" class="btn-primary">Dashboard</a>
+            <a style="background: gold;color: #333;"  href="/admin/testimonials" class="btn-primary">View All Testimonials</a>
         </div>
 
         <% if (testimonials.length === 0) { %>

@@ -8,8 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Admin Login</h1>
-        <p style="text-align: center; color: var(--text-secondary);">Access the testimonial management panel.</p>
+        <h1 style="text-align: left;">Admin Login</h1>
+        <p style="text-align: left; color: var(--text-secondary);">Access the testimonial management panel.</p>
         <hr>
         <% if (message) { %>
             <div class="message error"><%= message %></div>
@@ -21,7 +21,7 @@
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required placeholder="Please enter your admin password">
 
-            <button type="submit">Secure Login</button>
+            <button  style="background: gold;color: #333;" type="submit">Login</button>
         </form>
         <div style="text-align: center; margin-top: 20px;">
             <a href="/" style="color: var(--accent-blue); text-decoration: none; font-weight: 600;">← Back to Landing Page (API Consumers)</a>
