@@ -1,31 +1,30 @@
 // Load environment variables from .env file
 require('dotenv').config();
-const cors = require('cors');
 
 const express = require('express');
 const ejs = require('ejs');
-const { v4: uuidv4 } = require('uuid');
-const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-const multer = require('multer');
+const { v4: uuidv4 } = require('uuid'); // For generating unique IDs for testimonial links
+const jwt = require('jsonwebtoken'); // For admin authentication
+const cookieParser = require('cookie-parser'); // To parse cookies for JWT
+const multer = require('multer'); // For handling file uploads
+const path = require('path'); // NEW: Import the 'path' module
 
 // Firebase Admin SDK for server-side database operations (Firestore will still be used)
 const admin = require('firebase-admin');
 
-// NEW: Import Cloudinary
-const cloudinary = require('cloudinary').v2;
-
 // --- IMPORTANT FOR DEPLOYMENT ---
 // Instead of requiring a local file, we will parse the JSON content from an environment variable.
 // This is the secure way to handle service account keys on platforms like Vercel.
-const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK_CONFIG); // Changed this line
+// Ensure FIREBASE_ADMIN_SDK_CONFIG is set on Vercel with the full JSON content of your serviceAccountKey.json
+const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_SDK_CONFIG);
 
 // Initialize Firebase App options defensively
 const firebaseAppOptions = {
     credential: admin.credential.cert(serviceAccount),
 };
 
-
+// Conditionally add storageBucket if it's defined and not an empty string
+// This prevents the "Bucket name not specified" error if STORAGE_BUCKET is truly not set or empty
 if (process.env.STORAGE_BUCKET && process.env.STORAGE_BUCKET.trim() !== '') {
     firebaseAppOptions.storageBucket = process.env.STORAGE_BUCKET;
 }
@@ -34,6 +33,8 @@ admin.initializeApp(firebaseAppOptions);
 
 const db = admin.firestore(); // Firestore instance
 
+// Conditionally initialize bucket if STORAGE_BUCKET is provided
+// This also prevents errors if Storage is not intended for use
 let bucket = null;
 if (process.env.STORAGE_BUCKET && process.env.STORAGE_BUCKET.trim() !== '') {
     try {
@@ -52,18 +53,17 @@ const PORT = process.env.PORT || 3000;
 // For development, app.use(cors()); is fine (allows all origins).
 // For production, it's highly recommended to restrict this to your frontend's deployed URL.
 // After deploying your frontend, replace 'YOUR_DEPLOYED_FRONTEND_URL_HERE' with its actual URL.
+const cors = require('cors'); // Ensure cors is imported if it wasn't already
 app.use(cors({
-    origin: 'https://hudeen.netlify.app/', // e.g., 'https://your-frontend-app.vercel.app'
+    origin: 'YOUR_DEPLOYED_FRONTEND_URL_HERE', // e.g., 'https://your-frontend-app.vercel.app'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Needed if you're using cookies (like for admin auth)
     optionsSuccessStatus: 204
 }));
-// If you want to allow all origins during initial testing on Vercel:
-// app.use(cors());
-// But revert to the more restrictive one for production!
 
 
-// Configure Cloudinary
+// NEW: Configure Cloudinary
+const cloudinary = require('cloudinary').v2; // Ensure cloudinary is imported if it wasn't already
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
@@ -86,11 +86,13 @@ const upload = multer({
 });
 
 // Middleware
-app.set('view engine', 'ejs');
-app.use(express.static('public'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
+app.set('view engine', 'ejs'); // Set EJS as the template engine
+// NEW: Explicitly set the views directory for EJS to ensure it's found on deployment
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static('public')); // Serve static files from the 'public' directory
+app.use(express.json()); // Parse JSON request bodies (for non-file uploads)
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded request bodies
+app.use(cookieParser()); // Parse cookies
 
 const LINK_EXPIRY_HOURS = 24;
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME;
@@ -273,15 +275,14 @@ app.post('/submit-testimonial', upload.single('picture'), async (req, res) => {
         let pictureUrl = 'https://placehold.co/100x100/CCCCCC/000000?text=No+Img'; // Default placeholder URL
 
         if (file) {
-            // Upload to Cloudinary instead of Firebase Storage
             const uploadResult = await cloudinary.uploader.upload(
                 `data:${file.mimetype};base64,${file.buffer.toString('base64')}`,
                 {
-                    folder: 'testimonial_pictures', // Optional: folder in Cloudinary
-                    public_id: uuidv4() // Use UUID for unique public_id
+                    folder: 'testimonial_pictures',
+                    public_id: uuidv4()
                 }
             );
-            pictureUrl = uploadResult.secure_url; // Get the secure URL from Cloudinary
+            pictureUrl = uploadResult.secure_url;
         }
 
         await db.collection('testimonials').add({
@@ -307,7 +308,6 @@ app.post('/submit-testimonial', upload.single('picture'), async (req, res) => {
         } else if (error.message.includes('Only image files are allowed!')) {
             return res.status(400).send('Please upload only image files.');
         } else {
-            // Catch Cloudinary specific errors or other unexpected errors
             console.error('Cloudinary upload error:', error.response ? error.response.data : error.message);
             return res.status(500).send('An error occurred during image upload or submission.');
         }
