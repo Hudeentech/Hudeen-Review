@@ -7,16 +7,16 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1 style="text-align: left;">Manage Testimonials</h1>
-        <p style="text-align: left; color: var(--text-secondary);">Review, approve, or delete submitted testimonials.</p>
-        <hr>
+    <div class="container" style="max-width: 500px;  background: linear-gradient(80deg, gold, orange); background-clip: text;">
+        <h1 style="text-transform: capitalize; color: transparent; line-height: 1.3em; font-weight:500;">Manage Testimonials</h1>
+        <p style="text-align: left; color: white; line-height: 1.3em; font-weight: 400; text-transform: capitalize; ">Review, approve, or delete submitted testimonials.</p>
 
-        <div style="display: flex; flex-direction: row; justify-content: start; align-items: start;"  class="admin-links">
-            <a style="background: gold;color: #333;"  href="/admin/dashboard" class="btn-primary">Dashboard</a>
-            <a style="background: gold;color: #333;"  href="/admin/testimonials" class="btn-primary">Testimonials</a>
+
+        <div style="display: flex; flex-direction: row; justify-content: start; align-items: start;" class="admin-links">
+            <a  style="background: gold;color: #333; text-transform: capitalize;" href="/admin/dashboard" class="btn-primary">Dashboard</a>
+            <a style="background: gold;color: #333; text-transform: capitalize;"  href="/admin/testimonials" class="btn-primary">Testimonials</a>
         </div>
-
+        
         <% if (testimonials.length === 0) { %>
             <p style="text-align: center; font-style: italic; margin-top: 30px; color: var(--text-secondary);">No testimonials found yet. Generate a link from the dashboard to get started!</p>
         <% } else { %>

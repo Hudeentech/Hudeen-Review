@@ -9,28 +9,34 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" style="max-width: 500px;">
         <div class="testimonial-form-wrapper">
             <div class="testimonial-form-content">
-                <div class="testimonial-form-header">
-                    <h1>Loved Your Experience? <br>Share the Love!</h1>
+                <div class="testimonial-form-header"
+                    style="background: linear-gradient(to bottom, gold, orange); background-clip: text;">
+                    <h1 style="text-transform: capitalize; color: transparent; line-height: 1.3em; font-weight:400;">
+                        Loved Your Experience? Share the Love!</h1>
+                    <p
+                        style="text-align: left; color: rgb(214, 214, 214); line-height: 1.8em; font-weight: 400; text-transform: capitalize; ">
+                        Your testimonial helps us grow and build a solid brand accross the world</p>
+
                 </div>
 
                 <form id="testimonialForm" enctype="multipart/form-data">
                     <input type="hidden" name="token" value="<%= token %>">
 
                     <!-- Custom Image Upload Area -->
-                    <label for="picture" class="image-upload-area">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                        Click to choose image
-                    </label>
-                    <input type="file" id="picture" name="picture" accept="image/*">
-                    <small style="color: var(--text-secondary); text-align: center; margin-top: -0.5rem;">(Optional:
-                        Upload a profile picture)</small>
+                    <div style="margin-bottom: .5em ; width: 100%;border: gold 2px dashed; border-radius: 12px; padding: .5em;">
+                        <label for="picture" class="image-upload-area">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Click to choose image
+                        </label>
+                        <input type="file" id="picture" name="picture" accept="image/*">
+                    </div>
 
                     <label for="name">Full Name</label>
                     <input type="text" id="name" name="name" required placeholder="Please enter your full name">
@@ -45,7 +51,7 @@
                     <textarea id="message" name="message" required
                         placeholder="Your Message / Testimonials here!"></textarea>
 
-                    <button type="submit" class="testimonial-form-submit-btn">
+                    <button type="submit" class="testimonial-form-submit-btn" style="padding: 1em;">
                         Submit
                         <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
                             stroke-width="2.5" stroke="currentColor">
@@ -64,12 +70,14 @@
                     <button id="toast-close" aria-label="Close">&times;</button>
                 </div>
 
-                <i style="color: white; font-size: small;">Please note that this link will expire in 24hrs, and your testimonial will be displayed on the front
-                    page of my portfolio website. Visiting this link means you agree to the terms and conditions of my
-                    website, and also you are giving me the right to use your testimonial for marketing purposes.
+                <i style="color: white; font-size: small;">Please note that this link will expire in 24hrs, and your
+                    testimonial will be displayed on the front
+                    page of my portfolio website.
 
-                    Thank you for your time and support!
+                 
                 </i>
+
+                   <i style="display: block; font-size: small; margin-top: .5em; color: gold;">Thank you for your time and support!</i>
             </div>
 
         </div>

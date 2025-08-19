@@ -2,19 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Admin Dashboard</h1>
-        <p style="text-align: left; color: var(--text-secondary);">Manage testimonials and generate submission links.</p>
-        <hr>
+    <div class="container" style="max-width: 500px;  background: linear-gradient(80deg, gold, orange); background-clip: text;">
+        <h1 style="text-transform: capitalize; color: transparent; line-height: 1.3em; font-weight:500;">Admin Dashboard</h1>
+        <p style="text-align: left; color: white; line-height: 1.3em; font-weight: 400; text-transform: capitalize; ">Manage testimonials and generate submission links.</p>
 
         <div style="display: flex; flex-direction: row; justify-content: start; align-items: start;" class="admin-links">
-            <a  style="background: gold;color: #333;" href="/admin/dashboard" class="btn-primary">Dashboard</a>
-            <a style="background: gold;color: #333;"  href="/admin/testimonials" class="btn-primary">Testimonials</a>
+            <a  style="background: gold;color: #333; text-transform: capitalize;" href="/admin/dashboard" class="btn-primary">Dashboard</a>
+            <a style="background: gold;color: #333; text-transform: capitalize;"  href="/admin/testimonials" class="btn-primary">Testimonials</a>
         </div>
 
         <h4 style="font-size: 1.3em; color: white;">Overview Statistics</h4>
@@ -46,7 +46,7 @@
                         <li><strong><%= t.name %></strong> <%= t.company !== 'N/A' ? 'from ' + t.company : '' %>: "<%= t.message.substring(0, 70) %>..."</li>
                     <% }); %>
                 </ul>
-                <a href="/admin/testimonials" class="btn-primary" style="background: gold; border-radius: 8px; font-weight: 600; text-transform: uppercase; color: var(--text-dark);">Review Pending Now</a>
+                <a href="/admin/testimonials" class="btn-primary" style="background: gold; border-radius: 500pxpx; font-weight: 300; text-transform: capitalize; color: var(--text-dark);">Review Pending Now</a>
             </div>
         <% } else { %>
             <div class="notification-section" style="background-color: rgba(34, 197, 94, 0.08); border-color: rgb(73, 73, 73);">
@@ -54,13 +54,13 @@
             </div>
         <% } %>
 
-        <div class="generate-link-section">
-            <h2>Generate New Testimonial Link</h2>
+        <div style="background: linear-gradient(60deg, gold, orange); background-clip: text;" class="generate-link-section">
+            <h2 style="color: transparent; font-weight: 500; line-height: 1.3em;">Generate New Testimonial Link</h2>
             <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">Create a unique, one-time link for users to submit testimonials. This link expires after 24 hours.</p>
-            <button style="background: gold; font-size: .8em;" id="generateLinkBtn">Create New Submission Link</button>
+            <button style="border-radius:500px ; background:linear-gradient(80deg, gold , orange); text-transform: capitalize; font-weight: 300; font-size: .8em;" id="generateLinkBtn">Create New Submission Link</button>
             <div id="generatedLinkDisplay" class="generated-link" style="display:none;">
                 <span id="linkText"></span>
-                <button id="copyLinkBtn" style="background: white; font-size: .8em;" class="copy-btn">Copy Link</button>
+                <button id="copyLinkBtn" style="border-radius:500px ; background: white; text-transform: capitalize; font-weight: 300; font-size: 1em;" class="copy-btn">Copy Link</button>
             </div>
         </div>
         <div id="toast" class="toast-message"></div>
