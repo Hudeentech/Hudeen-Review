@@ -1,17 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Testimonial</title>
     <link rel="stylesheet" href="/css/style.css">
-</head>
+    <style>
+        /* Styles for the loading spinner (retained from previous versions) */
+        .spinner {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
+        /* Styles for the custom toast notification (retained from previous versions) */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column-reverse; /* Newest toast on top */
+            gap: 10px;
+        }
+        .custom-toast {
+            background-color: var(--input-background); /* Dark background */
+            color: var(--text-primary); /* Gold text by default */
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            border: 1px solid var(--text-primary); /* Gold border by default */
+            min-width: 200px;
+            text-align: center;
+        }
+        .custom-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .custom-toast.error {
+            background-color: #ff4d4d;
+            color: white;
+        }
+        .custom-toast.success {
+            color: white;
+            background-color: rgb(64, 231, 64);
+        }
+        .custom-toast.info {
+            color: var(--text-secondary);
+        }
+        
+        /* --- NEW: Loading Modal Styles --- */
+        .loading-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Dark semi-transparent background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top of everything */
+            backdrop-filter: blur(5px); /* Optional: blur background */
+            -webkit-backdrop-filter: blur(5px); /* Safari support */
+        }
+        .loading-modal-overlay.hidden {
+            display: none;
+        }
+        .loading-modal-content {
+            background-color: var(--container-background); /* Dark background from theme */
+            padding: 30px 40px;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-primary); /* Gold text */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            border: 1px solid var(--text-primary); /* Gold border */
+        }
+        .loading-modal-content .spinner {
+            width: 50px;
+            height: 50px;
+            stroke: gold; /* Gold spinner color */
+            /* Add stroke-width to the SVG element in HTML if needed for visual thickness */
+        }
+        /* Spinner path for dashed animation and color change */
+        .loading-modal-content .spinner .path {
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            animation: dash 1.5s ease-in-out infinite, color-change 6s ease-in-out infinite;
+        }
+        /* Keyframes for spinner animation (dash and color) */
+        @keyframes dash {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -35px;
+            }
+            100% {
+                stroke-dasharray: 89, 200;
+                stroke-dashoffset: -124px;
+            }
+        }
+        @keyframes color-change {
+            0% { stroke: gold; }
+            25% { stroke: orange; }
+            50% { stroke: gold; }
+            75% { stroke: orange; }
+            100% { stroke: gold; }
+        }
+        .loading-modal-content p {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-secondary); /* White text for clarity */
+        }
+    </style>
+</head>
 <body>
     <div class="container" style="max-width: 500px;">
-        <div class="testimonial-form-wrapper">
-            <div class="testimonial-form-content">
+        <div class="testimonial-form-content">
                 <div class="testimonial-form-header"
                     style="background: linear-gradient(to bottom, gold, orange); background-clip: text;">
                     <h1 style="text-transform: capitalize; color: transparent; line-height: 1.3em; font-weight:400;">
@@ -22,8 +140,8 @@
 
                 </div>
 
-                <form id="testimonialForm" enctype="multipart/form-data">
-                    <input type="hidden" name="token" value="<%= token %>">
+            <form id="testimonialForm" enctype="multipart/form-data">
+                <input type="hidden" name="token" value="<%= token %>">
 
                     <!-- Custom Image Upload Area -->
                     <div style="margin-bottom: .5em ; width: 100%;border: gold 2px dashed; border-radius: 12px; padding: .5em;">
@@ -38,97 +156,152 @@
                         <input type="file" id="picture" name="picture" accept="image/*">
                     </div>
 
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="Please enter your full name">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required placeholder="Please enter your full name">
 
-                    <label for="company">Company Name</label>
-                    <input type="text" id="company" name="company" placeholder="Enter your company name">
+                <label for="company">Company Name</label>
+                <input type="text" id="company" name="company" placeholder="Enter your company name">
 
-                    <label for="role">Your work title / position</label>
-                    <input type="text" id="role" name="role" placeholder="e.g. senior web developer">
+                <label for="role">Your work title / position</label>
+                <input type="text" id="role" name="role" placeholder="e.g. senior web developer">
 
-                    <label for="message">Testimonials</label>
-                    <textarea id="message" name="message" required
-                        placeholder="Your Message / Testimonials here!"></textarea>
+                <label for="message">Testimonials</label>
+                <textarea id="message" name="message" required placeholder="Your Message / Testimonials here!"></textarea>
 
-                    <button type="submit" class="testimonial-form-submit-btn" style="padding: 1em;">
-                        Submit
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
-                            stroke-width="2.5" stroke="currentColor">
-                            <path fill-rule="evenodd"
-                                d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-                                clip-rule="evenodd" />
-                        </svg>
-                    </button>
-                </form>
-                <div id="responseMessage" class="message" style="display:none;"></div>
+                <button type="submit" class="testimonial-form-submit-btn" id="submitBtn" style="padding: 1em;">
+                    Submit
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" style="width: 20px; height: 20px; margin-left: 8px;">
+                        <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </form>
+            <div id="responseMessage" class="message" style="display:none;"></div>
 
-                <!-- Fancy Modal Toast Notification -->
-                <div id="toast-modal" class="toast-modal" style="display:none;">
-                    <span id="toast-emoji"></span>
-                    <span id="toast-text"></span>
-                    <button id="toast-close" aria-label="Close">&times;</button>
-                </div>
-
-                <i style="color: white; font-size: small;">Please note that this link will expire in 24hrs, and your
-                    testimonial will be displayed on the front
-                    page of my portfolio website.
-
-                 
-                </i>
-
-                   <i style="display: block; font-size: small; margin-top: .5em; color: gold;">Thank you for your time and support!</i>
-            </div>
-
+            <i style="color: white; font-size: small; display: block; margin-top: 1em;">Please note that this link will expire in 24hrs, and your testimonial will be displayed on the front page of my portfolio website.
+            Visiting this link means you agree to the terms and conditions of my website, and also you are giving me the right to use your testimonial for marketing purposes.
+            </i>
+            <i style="display: block; font-size: small; margin-top: .5em; color: gold;">Thank you for your time and support!</i>
         </div>
     </div>
 
+    <!-- NEW: Loading Modal Overlay -->
+    <div id="loadingModal" class="loading-modal-overlay hidden">
+        <div class="loading-modal-content">
+            <svg class="spinner" viewBox="0 0 50 50" stroke-width="5">
+                <circle class="path" cx="25" cy="25" r="20" fill="none"></circle>
+            </svg>
+            <p id="loadingMessageText">Submitting your testimonial...</p>
+        </div>
+    </div>
+
+    <!-- Toast Container (for validation errors only, not main submission status) -->
+    <div id="toast-container" class="toast-container"></div>
+
     <script>
         const form = document.getElementById('testimonialForm');
-        const responseMessageDiv = document.getElementById('responseMessage');
+        const submitBtn = document.getElementById('submitBtn');
         const pictureInput = document.getElementById('picture');
-        const imageUploadArea = document.querySelector('.image-upload-area');
+        const imageUploadArea = document.querySelector('.image-upload-area'); // Target the label directly for simplicity
 
-        // Optional: Display selected file name
-        pictureInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px; height: 25px; margin-bottom: 8px; color: var(--text-primary);">
-                                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
-                            </svg>
-                            ${e.target.files[0].name}`;
-            } else {
-                imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                            <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
-                        </svg>Click to choose image`;
-            }
-        });
+        // Modal elements
+        const loadingModal = document.getElementById('loadingModal');
+        const loadingMessageText = document.getElementById('loadingMessageText');
+        const toastContainer = document.getElementById('toast-container'); // Existing toast container
 
-        function showToastModal(message, type = 'success') {
-            const toast = document.getElementById('toast-modal');
-            const toastText = document.getElementById('toast-text');
-            const toastEmoji = document.getElementById('toast-emoji');
-            const toastClose = document.getElementById('toast-close');
-            let emoji = '✅';
-            if (type === 'error') emoji = '❌';
-            if (type === 'info') emoji = 'ℹ️';
-            if (type === 'warning') emoji = '⚠️';
-            toastEmoji.textContent = emoji;
-            toastText.textContent = message;
-            toast.style.display = 'flex';
-            toast.classList.add('show');
-            // Auto-hide after 4s
-            setTimeout(() => {
-                toast.classList.remove('show');
-                toast.style.display = 'none';
-            }, 4000);
-            toastClose.onclick = () => {
-                toast.classList.remove('show');
-                toast.style.display = 'none';
-            };
+        // --- Constants ---
+        const MAX_FILE_SIZE_MB = 40; // Updated to 40MB as requested
+        const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+        const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
+
+        // --- Utility Functions ---
+
+        /**
+         * Displays the full-screen loading modal.
+         * @param {string} message The message to display in the modal.
+         */
+        function showLoadingModal(message) {
+            loadingMessageText.textContent = message;
+            loadingModal.classList.remove('hidden');
         }
 
+        /**
+         * Hides the full-screen loading modal.
+         */
+        function hideLoadingModal() {
+            loadingModal.classList.add('hidden');
+        }
+
+        /**
+         * Displays a custom toast notification (for validation errors, etc.).
+         * @param {string} message The message to display.
+         * @param {'success'|'error'|'info'} type The type of toast (affects styling).
+         * @param {number} duration The duration in milliseconds before the toast hides.
+         */
+        function showToast(message, type = 'success', duration = 4000) {
+            const toast = document.createElement('div');
+            toast.className = `custom-toast ${type}`;
+            toast.textContent = message;
+            
+            toastContainer.appendChild(toast);
+
+            // Trigger reflow to enable transition
+            void toast.offsetWidth; 
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+            }, duration);
+        }
+
+        // --- Event Listeners ---
+
+        // Handle image file input changes (Validation only, no preview/filename display as requested)
+        pictureInput.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            const defaultSvgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px; height: 25px; margin-bottom: 8px; color: var(--text-secondary); fill: currentColor;">
+                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+            </svg>Click to choose image<small style="color: var(--text-secondary); margin-top: 5px;">(Max ${MAX_FILE_SIZE_MB}MB, JPEG/PNG, GIF)</small>`;
+
+            if (!file) {
+                showToast('Image selection cancelled.', 'info');
+                imageUploadArea.innerHTML = defaultSvgContent;
+                pictureInput.value = ''; // Clear the input
+                return;
+            }
+
+            if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+                showToast('Please upload a JPEG, PNG, or GIF image.', 'error');
+                imageUploadArea.innerHTML = defaultSvgContent;
+                pictureInput.value = '';
+                return;
+            }
+            if (file.size > MAX_FILE_SIZE_BYTES) {
+                showToast(`Image size must be less than ${MAX_FILE_SIZE_MB}MB.`, 'error');
+                imageUploadArea.innerHTML = defaultSvgContent;
+                pictureInput.value = '';
+                return;
+            }
+
+            // Display file name temporarily for confirmation (overwrites default SVG)
+            imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px; height: 25px; margin-bottom: 8px; color: var(--text-primary); fill: currentColor;">
+                <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+            </svg>${file.name}<small style="color: var(--text-secondary); margin-top: 5px; display: block;">(Ready for upload)</small>`;
+        });
+
+        // Handle form submission
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            // Simple validation check for image
+            if (!pictureInput.files || pictureInput.files.length === 0) {
+                showToast('Please select an image for your testimonial.', 'error');
+                return;
+            }
+
+            // Show loading modal
+            showLoadingModal('Submitting your testimonial...');
+            submitBtn.disabled = true; // Disable the button while modal is active
 
             const formData = new FormData(form);
 
@@ -138,22 +311,27 @@
                     body: formData
                 });
 
-                const result = await response.text();
+                const resultText = await response.text();
 
                 if (response.ok) {
-                    showToastModal('Thank you for your testimonial! 🎉', 'success');
-                    form.reset();
-                    // Reset custom image upload area to default
-                    imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" /></svg>Click to choose image`;
+                    showToast('Testimonial submitted successfully! 🎉', 'success');
+                    form.reset(); // Clear form fields
+                    // Reset image upload area back to default state
+                    imageUploadArea.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 25px; height: 25px; margin-bottom: 8px; color: var(--text-secondary); fill: currentColor;">
+                        <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.69a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.06ZM10.5 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" clip-rule="evenodd" />
+                    </svg>Click to choose image<small style="color: var(--text-secondary); margin-top: 5px;">(Max ${MAX_FILE_SIZE_MB}MB, JPEG/PNG, GIF)</small>`;
                 } else {
-                    showToastModal(result || 'An unknown error occurred. Please try again. 😕', 'error');
+                    showToast(resultText || 'An unknown error occurred. Please try again. �', 'error');
                 }
             } catch (error) {
                 console.error('Error submitting testimonial:', error);
-                showToastModal('Network error or server unavailable. Please check your connection. 🌐', 'error');
+                showToast('Network error or server unavailable. Please check your connection. 🌐', 'error');
+            } finally {
+                hideLoadingModal(); // Hide loading modal regardless of success or failure
+                submitBtn.disabled = false; // Re-enable the button
             }
         });
     </script>
 </body>
-
 </html>
+�
