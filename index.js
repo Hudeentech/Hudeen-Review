@@ -57,7 +57,7 @@ const cors = require('cors'); // Ensure cors is imported if it wasn't already
 app.use(cors({
    origin: [
         'https://hudeen.netlify.app',
-        'https://Localhost://5173' // Add your additional URL here
+        'http://Localhost://5173' // Add your additional URL here
     ],// e.g., 'https://your-frontend-app.vercel.app'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Needed if you're using cookies (like for admin auth)
