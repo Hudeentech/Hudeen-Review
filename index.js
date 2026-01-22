@@ -55,7 +55,10 @@ const PORT = process.env.PORT || 3000;
 // After deploying your frontend, replace 'YOUR_DEPLOYED_FRONTEND_URL_HERE' with its actual URL.
 const cors = require('cors'); // Ensure cors is imported if it wasn't already
 app.use(cors({
-    origin: 'https://hudeen.netlify.app', // e.g., 'https://your-frontend-app.vercel.app'
+   origin: [
+        'https://hudeen.netlify.app',
+        'https://Localhost://5173' // Add your additional URL here
+    ],// e.g., 'https://your-frontend-app.vercel.app'
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Needed if you're using cookies (like for admin auth)
     optionsSuccessStatus: 204
